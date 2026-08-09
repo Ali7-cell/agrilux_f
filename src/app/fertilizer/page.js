@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./fertilizer.module.css";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+import { getApiUrl } from "@/lib/api";
 
 const CROPS = [
   "Barley", "Cotton", "Ground Nuts", "Maize", "Millets",
@@ -92,7 +91,7 @@ export default function FertilizerAdvisor() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/predict-fertilizer`, {
+      const response = await fetch(`${getApiUrl()}/predict-fertilizer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./login.module.css";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+import { getApiUrl } from "@/lib/api";
 
 export default function Login() {
   const router = useRouter();
@@ -44,8 +43,9 @@ export default function Login() {
 
     try {
       let response;
+      const baseUrl = getApiUrl();
       if (isLoginMode) {
-        response = await fetch(`${API_URL}/login`, {
+        response = await fetch(`${baseUrl}/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -57,7 +57,7 @@ export default function Login() {
           setLoading(false);
           return;
         }
-        response = await fetch(`${API_URL}/register`, {
+        response = await fetch(`${baseUrl}/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, email, password }),

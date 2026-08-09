@@ -4,8 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./chat.module.css";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+import { getApiUrl } from "@/lib/api";
 
 export default function ChatAssistant() {
   const router = useRouter();
@@ -60,7 +59,7 @@ export default function ChatAssistant() {
     }));
 
     try {
-      const response = await fetch(`${API_URL}/chat`, {
+      const response = await fetch(`${getApiUrl()}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./yield.module.css";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+import { getApiUrl } from "@/lib/api";
 
 const AREAS = [
   "Albania", "Algeria", "Angola", "Argentina", "Armenia", "Australia", "Austria",
@@ -104,7 +103,7 @@ export default function YieldPrediction() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/predict-yield`, {
+      const response = await fetch(`${getApiUrl()}/predict-yield`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

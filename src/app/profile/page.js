@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./profile.module.css";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+import { getApiUrl } from "@/lib/api";
 
 export default function AccountProfile() {
   const router = useRouter();
@@ -34,7 +33,7 @@ export default function AccountProfile() {
 
   async function loadProfile(token) {
     try {
-      const response = await fetch(`${API_URL}/profile`, {
+      const response = await fetch(`${getApiUrl()}/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
@@ -67,7 +66,7 @@ export default function AccountProfile() {
     if (password) payload.password = password;
 
     try {
-      const response = await fetch(`${API_URL}/profile`, {
+      const response = await fetch(`${getApiUrl()}/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

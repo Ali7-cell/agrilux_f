@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./history.module.css";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+import { getApiUrl } from "@/lib/api";
 const LIMIT = 10;
 
 const FILTER_OPTIONS = [
@@ -50,7 +49,7 @@ export default function PredictionHistory() {
     setMessage(pageNum === 1 ? "Loading..." : "");
 
     const token = localStorage.getItem("token");
-    let url = `${API_URL}/history?page=${pageNum}&limit=${LIMIT}`;
+    let url = `${getApiUrl()}/history?page=${pageNum}&limit=${LIMIT}`;
     if (filterType) url += `&type=${filterType}`;
 
     try {
