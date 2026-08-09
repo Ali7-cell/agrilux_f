@@ -81,6 +81,9 @@ export default function Home() {
           <h1 className={styles.heroTitle}>
             Agri<span className={styles.highlight}>lux</span>
           </h1>
+          <p className={styles.heroDesc}>
+            Agrilux is an AI-powered smart farming platform that delivers data-driven crop recommendations, fertilizer advice, and yield predictions for modern agriculture.
+          </p>
           <div className={styles.ctaRow}>
             <Link href="/login" className={styles.btnPrimary}>
               Start Farming Smarter

@@ -1,6 +1,6 @@
 "use client";
 
-export default function TreeLogo({ size = 34, showText = true, className = "", textColor = "inherit" }) {
+export default function TreeLogo({ size = 40, showText = true, className = "", textColor = "inherit" }) {
   return (
     <div style={{ display: "inline-flex", alignItems: "center", gap: "10px" }} className={className}>
       <svg
@@ -12,60 +12,70 @@ export default function TreeLogo({ size = 34, showText = true, className = "", t
         style={{ display: "block", flexShrink: 0 }}
       >
         <defs>
-          <linearGradient id="treeGradientMain" x1="50" y1="10" x2="50" y2="85" gradientUnits="userSpaceOnUse">
+          <linearGradient id="treeGradBg" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor="#2ecc71" />
             <stop offset="50%" stopColor="#10b981" />
-            <stop offset="100%" stopColor="#059669" />
-          </linearGradient>
-          <linearGradient id="treeGradientSub" x1="20" y1="20" x2="80" y2="80" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#34d399" />
             <stop offset="100%" stopColor="#047857" />
           </linearGradient>
-          <linearGradient id="treeTrunkGrad" x1="50" y1="65" x2="50" y2="92" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#92400e" />
-            <stop offset="100%" stopColor="#451a03" />
+          <linearGradient id="leafGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#6ee7b7" />
+            <stop offset="100%" stopColor="#34d399" />
           </linearGradient>
-          <filter id="treeGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <linearGradient id="trunkGrad" x1="50" y1="65" x2="50" y2="95" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#854d0e" />
+            <stop offset="100%" stopColor="#3f2305" />
+          </linearGradient>
+          <filter id="treeGlowFilter" x="-15%" y="-15%" width="130%" height="130%">
             <feGaussianBlur stdDeviation="2.5" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
 
-        {/* Tree Trunk */}
+        {/* Tree Trunk Base */}
         <path
-          d="M44 62 H56 V85 C56 89 60 91 63 92 H37 C40 91 44 89 44 85 V62 Z"
-          fill="url(#treeTrunkGrad)"
+          d="M44 65 C44 65 43 78 36 90 H64 C57 78 56 65 56 65 Z"
+          fill="url(#trunkGrad)"
         />
 
-        {/* Bottom Canopy Layer */}
+        {/* Tree Foliage (Canopy Circle/Shield) */}
         <path
-          d="M50 12 L84 58 C86 61 84 65 79 65 H21 C16 65 14 61 16 58 L50 12 Z"
-          fill="url(#treeGradientMain)"
-          filter="url(#treeGlow)"
+          d="M50 8 C25 8 10 26 10 48 C10 65 24 74 44 74 H56 C76 74 90 65 90 48 C90 26 75 8 50 8 Z"
+          fill="url(#treeGradBg)"
+          filter="url(#treeGlowFilter)"
         />
 
-        {/* Middle Layer Canopy */}
+        {/* "Ag" Monogram Branches inside Green Foliage */}
+        {/* Letter 'A' (Left branch) */}
         <path
-          d="M50 20 L75 54 C77 57 75 60 70 60 H30 C25 60 23 57 25 54 L50 20 Z"
-          fill="url(#treeGradientSub)"
-          opacity="0.95"
+          d="M31 58 L42 22 C43 19 46 19 47 22 L51 36"
+          stroke="#ffffff"
+          strokeWidth="5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M35 44 H48"
+          stroke="#ffffff"
+          strokeWidth="4.5"
+          strokeLinecap="round"
         />
 
-        {/* Top Canopy Highlight */}
+        {/* Letter 'g' (Right branch) */}
         <path
-          d="M50 28 L66 48 C68 51 66 53 61 53 H39 C34 53 32 51 34 48 L50 28 Z"
-          fill="#6ee7b7"
-          opacity="0.8"
+          d="M66 32 C60 32 55 36 55 42 C55 48 60 52 66 52 C72 52 75 47 75 41 V56 C75 63 69 66 62 66"
+          stroke="#ffffff"
+          strokeWidth="5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
 
-        {/* Organic Leaf Details */}
-        <circle cx="50" cy="22" r="3" fill="#ffffff" opacity="0.6" />
-        <circle cx="41" cy="38" r="2.5" fill="#ffffff" opacity="0.4" />
-        <circle cx="59" cy="44" r="2.5" fill="#ffffff" opacity="0.4" />
+        {/* Leaf Accent details on top of tree */}
+        <path d="M50 4 C50 4 54 11 48 15 C46 12 50 4 50 4 Z" fill="url(#leafGlow)" />
+        <path d="M52 5 C52 5 60 9 57 16 C53 14 52 5 52 5 Z" fill="url(#leafGlow)" />
       </svg>
 
       {showText && (
-        <span style={{ fontWeight: 800, fontSize: "1.4rem", letterSpacing: "-0.5px", color: textColor, fontFamily: "inherit" }}>
+        <span style={{ fontWeight: 800, fontSize: "1.45rem", letterSpacing: "-0.5px", color: textColor, fontFamily: "inherit" }}>
           Agri<span style={{ color: "#2ecc71" }}>lux</span>
         </span>
       )}
