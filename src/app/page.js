@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import styles from "./page.module.css";
+import TreeLogo from "@/components/TreeLogo";
 
 export default function Home() {
   const heroRef = useRef(null);
@@ -38,12 +39,9 @@ export default function Home() {
       {/* ── NAVIGATION ── */}
       <nav className={styles.nav}>
         <div className={styles.navInner}>
-          <div className={styles.logo}>
-            <span className={styles.logoIcon}>🌱</span>
-            <span className={styles.logoText}>
-              Agri<span className={styles.logoAccent}>lux</span>
-            </span>
-          </div>
+          <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
+            <TreeLogo size={36} />
+          </Link>
           <div className={styles.navLinks}>
             <a href="#features" className={styles.navLink}>Features</a>
             <a href="#how-it-works" className={styles.navLink}>How it Works</a>
@@ -81,14 +79,8 @@ export default function Home() {
             AI-Powered Smart Farming
           </div>
           <h1 className={styles.heroTitle}>
-            Farm smarter with{" "}
-            <span className={styles.highlight}>AI-powered</span>{" "}
-            insights
+            Agri<span className={styles.highlight}>lux</span>
           </h1>
-          <p className={styles.heroDesc}>
-            Get crop recommendations, fertilizer advice, and yield predictions —
-            all powered by advanced machine learning, all in one place.
-          </p>
           <div className={styles.ctaRow}>
             <Link href="/login" className={styles.btnPrimary}>
               Start Farming Smarter
@@ -276,7 +268,7 @@ export default function Home() {
         <div className={styles.footerInner}>
           <div className={styles.footerBrand}>
             <div className={styles.footerLogo}>
-              <span>🌱</span> Agri<span>lux</span>
+              <TreeLogo size={30} />
             </div>
             <p className={styles.footerTagline}>
               AI-Powered Smart Farming Assistant. Helping farmers make data-driven

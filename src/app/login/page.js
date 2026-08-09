@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./login.module.css";
 import { getApiUrl } from "@/lib/api";
+import TreeLogo from "@/components/TreeLogo";
 
 export default function Login() {
   const router = useRouter();
@@ -111,10 +112,7 @@ export default function Login() {
       <div className={styles.container}>
         {/* Logo */}
         <Link href="/" className={styles.brandLink}>
-          <div className={styles.brand}>
-            <span className={styles.brandIcon}>🌱</span>
-            <span className={styles.brandText}>Agri<span>lux</span></span>
-          </div>
+          <TreeLogo size={36} />
         </Link>
 
         {/* Card */}

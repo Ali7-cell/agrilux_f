@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./dashboard.module.css";
+import TreeLogo from "@/components/TreeLogo";
 
 const CARDS = [
   { href: "/crop", icon: "🌱", title: "Crop Recommendation", desc: "Get the best crop for your soil & weather", color: "#2d6a4f" },
@@ -56,8 +57,9 @@ export default function Dashboard() {
         {/* Top bar */}
         <div className={styles.topbar}>
           <div className={styles.topbarLeft}>
-            <span className={styles.topbarIcon}>🌾</span>
-            <span className={styles.topbarBrand}>Agrilux</span>
+            <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
+              <TreeLogo size={32} />
+            </Link>
           </div>
           <button className={styles.logoutBtn} onClick={logout}>
             <span>Logout</span>
