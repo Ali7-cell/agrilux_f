@@ -1,6 +1,6 @@
 "use client";
 
-export default function TreeLogo({ size = 40, showText = true, className = "", textColor = "inherit" }) {
+export default function TreeLogo({ size = 40, showText = false, className = "", textColor = "inherit" }) {
   return (
     <div style={{ display: "inline-flex", alignItems: "center", gap: "10px" }} className={className}>
       <svg
