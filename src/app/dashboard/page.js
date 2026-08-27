@@ -4,15 +4,18 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./dashboard.module.css";
-import TreeLogo from "@/components/TreeLogo";
+import HeaderNav from "@/components/HeaderNav";
+import TextSplit from "@/components/TextSplit";
+import IconGlowCard from "@/components/IconGlowCard";
+import { CropIcon, FertilizerIcon, YieldIcon, RobotIcon, HistoryIcon, UserIcon } from "@/components/icons/Icons";
 
-const CARDS = [
-  { href: "/crop", icon: "🌱", title: "Crop Recommendation", desc: "Get the best crop for your soil & weather", color: "#2d6a4f" },
-  { href: "/fertilizer", icon: "💧", title: "Fertilizer Recommendation", desc: "Find the right fertilizer for your crop", color: "#1e88e5" },
-  { href: "/yield", icon: "📈", title: "Yield Prediction", desc: "Estimate your expected crop yield", color: "#e67e22" },
-  { href: "/history", icon: "📜", title: "History", desc: "View your past predictions", color: "#8e44ad" },
-  { href: "/profile", icon: "👤", title: "My Profile", desc: "View and edit your account details", color: "#e74c3c" },
-  { href: "/chat", icon: "🤖", title: "AI Chat Assistant", desc: "Ask our smart assistant anything about farming", color: "#00897b" },
+const SERVICES = [
+  { href: "/crop", icon: <CropIcon size={28} color="#9FD23A" />, title: "Crop Recommendation", desc: "Predict optimal crops from soil nutrients (N-P-K), pH, and rainfall data." },
+  { href: "/fertilizer", icon: <FertilizerIcon size={28} color="#9FD23A" />, title: "Fertilizer Advisor", desc: "Calculate exact fertilizer blends based on crop type and soil nutrient deficiencies." },
+  { href: "/yield", icon: <YieldIcon size={28} color="#9FD23A" />, title: "Yield Prediction", desc: "Estimate total harvest output in metric tons per hectare before planting." },
+  { href: "/chat", icon: <RobotIcon size={28} color="#9FD23A" />, title: "AI Assistant", desc: "Chat with intelligent AI for crop pathology, soil health, and pest management." },
+  { href: "/history", icon: <HistoryIcon size={28} color="#9FD23A" />, title: "Prediction History", desc: "View and filter all your past soil analyses and AI recommendations." },
+  { href: "/profile", icon: <UserIcon size={28} color="#9FD23A" />, title: "Account & Profile", desc: "Manage your farm location, unit preferences, and login credentials." },
 ];
 
 export default function Dashboard() {
@@ -36,61 +39,42 @@ export default function Dashboard() {
 
   if (!authorized) {
     return (
-      <div className={styles.bodyWrapper}>
-        <div className={styles.loadingScreen}>
-          <div className={styles.loadingSpinner} />
-          <p>Loading dashboard...</p>
-        </div>
+      <div className={styles.loadingScreen}>
+        <div className={styles.loadingSpinner} />
+        <p style={{ textTransform: "uppercase", letterSpacing: "0.08em", fontSize: "0.85rem" }}>
+          VERIFYING AUTHORIZATION...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className={styles.bodyWrapper}>
-      {/* Background decoration */}
-      <div className={styles.bgDecor}>
-        <div className={styles.bgCircle1} />
-        <div className={styles.bgCircle2} />
-      </div>
+    <div className={styles.bodyWrapper} data-theme="dark">
+      <HeaderNav activePage="dashboard" />
 
       <div className={styles.container}>
-        {/* Top bar */}
-        <div className={styles.topbar}>
-          <div className={styles.topbarLeft}>
-            <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
-              <TreeLogo size={32} />
-            </Link>
+        <div className={styles.headerRow}>
+          <div>
+            <span className="eyebrow" style={{ color: "#9FD23A" }}>FARMER PORTAL</span>
+            <TextSplit as="h1" className={styles.welcomeTitle} style={{ marginTop: "0.4rem" }}>
+              Control Center
+            </TextSplit>
           </div>
+
           <button className={styles.logoutBtn} onClick={logout}>
-            <span>Logout</span>
-            <span className={styles.logoutArrow}>→</span>
+            <span>LOGOUT</span>
+            <span>→</span>
           </button>
         </div>
 
-        {/* Welcome */}
-        <div className={styles.welcomeSection}>
-          <h1>Welcome back! 👋</h1>
-          <p>Choose a service below to get started with smart farming.</p>
-        </div>
-
-        {/* Cards Grid */}
         <div className={styles.grid}>
-          {CARDS.map((card, index) => (
-            <Link
-              key={card.href}
-              href={card.href}
-              className={styles.card}
-              style={{ animationDelay: `${index * 0.08}s` }}
-            >
-              <div className={styles.cardIconWrap} style={{ background: `${card.color}15` }}>
-                <span className={styles.cardIcon}>{card.icon}</span>
-              </div>
-              <div className={styles.cardContent}>
-                <h3>{card.title}</h3>
-                <p>{card.desc}</p>
-              </div>
-              <div className={styles.cardArrow}>→</div>
-              <div className={styles.cardBorderGlow} style={{ background: `linear-gradient(135deg, ${card.color}20, transparent)` }} />
+          {SERVICES.map((serv) => (
+            <Link key={serv.href} href={serv.href} style={{ textDecoration: "none", color: "inherit" }}>
+              <IconGlowCard
+                icon={serv.icon}
+                title={serv.title}
+                description={serv.desc}
+              />
             </Link>
           ))}
         </div>

@@ -1,356 +1,273 @@
-/* ═══════════════════════════════════════════
-   CROP RECOMMENDATION — Premium Form
-   ═══════════════════════════════════════════ */
-
 .bodyWrapper {
-  background: var(--grad-hero);
+  background-color: var(--main-green);
+  color: var(--beige);
   min-height: 100vh;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
+  padding: 7rem 1.88em 4rem;
 }
-
-.bgDecor { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-.bgCircle1 { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: rgba(149,213,178,0.06); top: -150px; right: -100px; }
-.bgCircle2 { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: rgba(45,106,79,0.08); bottom: -100px; left: -80px; }
 
 .container {
-  position: relative;
-  z-index: 1;
-  max-width: 560px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 28px 20px 60px 20px;
 }
 
-/* Top bar */
-.topbar {
-  margin-bottom: 24px;
-  animation: fadeInUp 0.5s var(--ease-out) both;
-}
-
-.backBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--clr-white);
+.resetBtn {
+  background: transparent;
+  border: 1px solid rgba(244, 237, 230, 0.2);
+  color: rgba(244, 237, 230, 0.7);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
   font-weight: 600;
-  font-size: 14px;
-  opacity: 0.9;
-  transition: all var(--duration-fast) var(--ease-out);
-  text-decoration: none;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.backBtn:hover {
-  opacity: 1;
+.resetBtn:hover {
+  border-color: rgba(244, 237, 230, 0.5);
+  color: var(--beige);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-.backArrow {
-  transition: transform var(--duration-fast) var(--ease-out);
-}
-
-.backBtn:hover .backArrow {
-  transform: translateX(-3px);
-}
-
-/* Card */
 .card {
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(20px);
-  border-radius: var(--radius-xl);
-  padding: 36px 32px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
-  animation: fadeInUp 0.6s var(--ease-out) 0.1s both;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(244, 237, 230, 0.12);
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  backdrop-filter: blur(12px);
 }
 
 .cardHeader {
-  text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 2rem;
 }
 
-.cardIconWrap {
-  font-size: 40px;
-  margin-bottom: 10px;
-  animation: bounceIn 0.6s var(--ease-spring) 0.3s both;
+.title {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0.5rem 0;
 }
 
-.cardHeader h2 {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--clr-forest);
-  margin-bottom: 6px;
-  letter-spacing: -0.5px;
+/* Preset Section */
+.presetSection {
+  margin-bottom: 2rem;
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(244, 237, 230, 0.15);
+  border-radius: 16px;
 }
 
-.cardHeader p {
-  font-size: 14px;
-  color: var(--clr-gray-500);
-}
-
-/* Weather button */
-.weatherBtn {
-  width: 100%;
-  padding: 12px;
-  background: rgba(82, 121, 111, 0.1);
-  color: var(--clr-sage);
-  border: 2px dashed rgba(82, 121, 111, 0.25);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: inherit;
-  margin-bottom: 24px;
-  transition: all var(--duration-normal) var(--ease-out);
-}
-
-.weatherBtn:hover:not(:disabled) {
-  background: rgba(82, 121, 111, 0.15);
-  border-color: var(--clr-sage);
-}
-
-.weatherBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Form sections */
-.formSection {
-  margin-bottom: 24px;
-}
-
-.formSectionTitle {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--clr-gray-400);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 14px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--clr-gray-100);
-}
-
-/* Fields */
-.field {
-  margin-bottom: 14px;
-}
-
-.card label {
+.presetHeading {
   display: block;
-  margin-bottom: 5px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--clr-gray-700);
-}
-
-.card input, .card select {
-  width: 100%;
-  padding: 11px 14px;
-  border: 2px solid var(--clr-gray-200);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  font-family: inherit;
-  outline: none;
-  background: var(--clr-white);
-  color: var(--clr-gray-800);
-  transition: all var(--duration-fast) var(--ease-out);
-}
-
-.card input:focus, .card select:focus {
-  border-color: var(--clr-emerald);
-  box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.08);
-}
-
-.card input::placeholder {
-  color: var(--clr-gray-400);
-}
-
-.row {
-  display: flex;
-  gap: 12px;
-}
-
-.row .field {
-  flex: 1;
-}
-
-/* Submit button */
-.submitBtn {
-  width: 100%;
-  padding: 14px;
-  background: var(--grad-btn);
-  color: var(--clr-white);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-size: 15px;
+  font-size: 0.75rem;
   font-weight: 700;
-  font-family: inherit;
+  letter-spacing: 0.08em;
+  color: rgba(244, 237, 230, 0.6);
+  margin-bottom: 0.8rem;
+}
+
+.presetChips {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.presetChip {
+  background: rgba(159, 210, 58, 0.08);
+  border: 1px solid rgba(159, 210, 58, 0.25);
+  color: var(--bright-lime);
+  padding: 0.45rem 0.9rem;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25 ease;
+}
+
+.presetChip:hover {
+  background: rgba(159, 210, 58, 0.2);
+  border-color: rgba(159, 210, 58, 0.5);
+  transform: translateY(-1px);
+}
+
+.weatherBtn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all var(--duration-normal) var(--ease-spring);
-  box-shadow: 0 4px 14px rgba(27, 67, 50, 0.3);
+  gap: 0.5rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 50px;
+  background-color: rgba(159, 210, 58, 0.12);
+  border: 1px solid rgba(159, 210, 58, 0.3);
+  color: var(--bright-lime);
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  margin-bottom: 2.5rem;
+  transition: all 0.3s ease;
 }
 
-.submitBtn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(27, 67, 50, 0.4);
+.weatherBtn:hover {
+  background-color: rgba(159, 210, 58, 0.22);
 }
 
-.submitBtn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.locationBadgeSpan {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: #9FD23A;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  background-color: rgba(159, 210, 58, 0.1);
 }
 
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--clr-white);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
-/* Messages */
-.messageBox {
+.fieldGroup {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fieldLabel {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: rgba(244, 237, 230, 0.7);
+}
+
+.rangeBadge {
+  font-size: 0.7rem;
+  color: rgba(159, 210, 58, 0.8);
+  background: rgba(159, 210, 58, 0.08);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
   font-weight: 500;
-  margin-top: 16px;
-  animation: fadeInUp 0.4s var(--ease-out) both;
-  line-height: 1.5;
 }
 
-.messageSuccess {
-  background: rgba(45, 106, 79, 0.08);
-  color: var(--clr-emerald);
-  border: 1px solid rgba(45, 106, 79, 0.15);
-}
-
-.messageError {
-  background: rgba(220, 38, 38, 0.06);
-  color: #dc2626;
-  border: 1px solid rgba(220, 38, 38, 0.12);
-}
-
-/* Result box */
-.resultBox {
-  margin-top: 24px;
-  padding: 28px 24px;
-  background: linear-gradient(135deg, var(--clr-ice) 0%, rgba(149, 213, 178, 0.2) 100%);
-  border-radius: var(--radius-lg);
+.messageAlert {
+  margin-top: 1.5rem;
   text-align: center;
-  border: 1px solid rgba(45, 106, 79, 0.1);
-  animation: scaleIn 0.5s var(--ease-spring) both;
+  font-size: 0.95rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
 }
 
-.resultIcon {
-  font-size: 44px;
-  margin-bottom: 12px;
-  animation: bounceIn 0.6s var(--ease-spring) 0.2s both;
+.resultBox {
+  margin-top: 2.5rem;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  background-color: rgba(159, 210, 58, 0.08);
+  border: 1px solid rgba(159, 210, 58, 0.3);
+  text-align: center;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
-.resultBox h3 {
-  color: var(--clr-forest);
-  font-size: 26px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  text-transform: capitalize;
-  letter-spacing: -0.5px;
-}
-
-.resultConf {
-  color: var(--clr-gray-600);
-  font-size: 14px;
-  margin-bottom: 12px;
+.resultTitle {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  color: var(--bright-lime);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
 .confBar {
+  height: 8px;
   width: 100%;
-  height: 6px;
-  background: rgba(27, 67, 50, 0.1);
-  border-radius: var(--radius-full);
+  max-width: 320px;
+  margin: 1rem auto 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
   overflow: hidden;
-  margin-bottom: 20px;
 }
 
 .confFill {
   height: 100%;
-  background: var(--grad-btn);
-  border-radius: var(--radius-full);
-  transition: width 1s var(--ease-out);
+  background: linear-gradient(90deg, #7C914C, #9FD23A);
+  border-radius: 99px;
+  transition: width 0.8s ease;
 }
 
-.nextButtons {
-  display: flex;
-  gap: 10px;
+.resultTipsCard {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(244, 237, 230, 0.08);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+  text-align: left;
 }
 
-.nextBtn, .nextBtnAlt {
-  flex: 1;
-  padding: 11px;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 14px;
+.tipTitle {
+  font-size: 0.85rem;
   font-weight: 700;
-  font-family: inherit;
-  transition: all var(--duration-normal) var(--ease-spring);
+  color: #9FD23A;
+  display: block;
+  margin-bottom: 0.4rem;
 }
 
-.nextBtn {
-  background: var(--grad-btn);
-  color: var(--clr-white);
-  box-shadow: 0 4px 14px rgba(27, 67, 50, 0.25);
+.tipText {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(244, 237, 230, 0.85);
+  margin: 0;
 }
 
-.nextBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(27, 67, 50, 0.35);
-}
-
-.nextBtnAlt {
-  background: rgba(82, 121, 111, 0.1);
-  color: var(--clr-sage);
-}
-
-.nextBtnAlt:hover {
-  background: rgba(82, 121, 111, 0.18);
-  transform: translateY(-2px);
-}
-
-/* Loading screen */
-.loadingScreen {
+.resultActions {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: 1rem;
   justify-content: center;
-  min-height: 100vh;
-  gap: 16px;
-  color: var(--clr-white);
+  flex-wrap: wrap;
 }
 
-.loadingScreen p {
-  font-size: 15px;
-  opacity: 0.8;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.loadingSpinner {
-  width: 36px;
-  height: 36px;
-  border: 4px solid rgba(255, 255, 255, 0.2);
-  border-top-color: var(--clr-mint);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+@media (max-width: 768px) {
+  .bodyWrapper {
+    padding: 5.5rem 1rem 3rem;
+  }
+  .card {
+    padding: 1.8rem 1.2rem;
+    border-radius: 18px;
+  }
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  .weatherBtn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.78rem;
+  }
+  .resultActions {
+    flex-direction: column;
+    width: 100%;
+  }
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .card { padding: 24px 18px; }
-  .row { flex-direction: column; gap: 0; }
-  .nextButtons { flex-direction: column; }
-}

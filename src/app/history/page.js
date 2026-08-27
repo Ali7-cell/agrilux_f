@@ -4,29 +4,18 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./history.module.css";
+import HeaderNav from "@/components/HeaderNav";
+import TextSplit from "@/components/TextSplit";
 import { getApiUrl } from "@/lib/api";
-const LIMIT = 10;
+import { CropIcon, FertilizerIcon, YieldIcon } from "@/components/icons/Icons";
 
-const FILTER_OPTIONS = [
-  { label: "All", value: null },
-  { label: "Crop", value: "crop" },
-  { label: "Fertilizer", value: "fertilizer" },
-  { label: "Yield", value: "yield" },
-];
-
-export default function PredictionHistory() {
+export default function HistoryPage() {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
-
-  // Pagination & Filtering state
-  const [items, setItems] = useState([]);
-  const [page, setPage] = useState(1);
-  const [filter, setFilter] = useState(null);
-  const [total, setTotal] = useState(0);
-
-  // Status state
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [predictions, setPredictions] = useState([]);
+  const [filter, setFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,159 +23,152 @@ export default function PredictionHistory() {
       router.push("/login");
     } else {
       setAuthorized(true);
+      fetchHistory(token);
     }
   }, [router]);
 
-  // Trigger loading when filter changes (starts at page 1)
-  useEffect(() => {
-    if (authorized) {
-      fetchHistory(1, filter, true);
-    }
-  }, [authorized, filter]);
-
-  async function fetchHistory(pageNum, filterType, reset = false) {
-    setLoading(true);
-    setMessage(pageNum === 1 ? "Loading..." : "");
-
-    const token = localStorage.getItem("token");
-    let url = `${getApiUrl()}/history?page=${pageNum}&limit=${LIMIT}`;
-    if (filterType) url += `&type=${filterType}`;
-
+  async function fetchHistory(token) {
     try {
-      const response = await fetch(url, {
-        headers: { Authorization: `Bearer ${token}` },
+      const response = await fetch(`${getApiUrl()}/history`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(data.detail || "Something went wrong.");
-        setLoading(false);
+        setError(data.detail || "Failed to fetch prediction history.");
         return;
       }
 
-      setMessage("");
-      setTotal(data.total);
-
-      if (reset) {
-        setItems(data.items);
-        if (data.items.length === 0) {
-          setMessage("No predictions yet. Go try one of the models!");
-        }
-      } else {
-        setItems((prev) => [...prev, ...data.items]);
-      }
-
-      setPage(pageNum + 1);
+      setPredictions(data);
     } catch (err) {
-      setMessage("Could not connect to the server. Please check if the backend is running.");
+      setError("Could not connect to the backend server.");
     } finally {
       setLoading(false);
     }
   }
 
-  function handleFilterChange(type) {
-    setFilter(type);
-  }
+  const filteredPredictions = predictions.filter((p) => {
+    if (filter === "all") return true;
+    return p.type.toLowerCase() === filter.toLowerCase();
+  });
 
-  function loadMore() {
-    fetchHistory(page, filter, false);
-  }
-
-  if (!authorized) {
-    return (
-      <div className={styles.bodyWrapper}>
-        <div className={styles.loadingScreen}>
-          <div className={styles.loadingSpinner} />
-          <p>Checking authorization...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Helper to determine badge classes
   const getBadgeClass = (type) => {
-    if (type === "crop") return `${styles.badge} ${styles.badgeCrop}`;
-    if (type === "fertilizer") return `${styles.badge} ${styles.badgeFertilizer}`;
-    if (type === "yield") return `${styles.badge} ${styles.badgeYield}`;
-    return styles.badge;
+    switch (type.toLowerCase()) {
+      case "crop":
+        return styles.badgeCrop;
+      case "fertilizer":
+        return styles.badgeFertilizer;
+      case "yield":
+        return styles.badgeYield;
+      default:
+        return "";
+    }
   };
 
-  const getTypeBorder = (type) => {
-    if (type === "crop") return "3px solid #2d6a4f";
-    if (type === "fertilizer") return "3px solid #1e88e5";
-    if (type === "yield") return "3px solid #e67e22";
-    return "3px solid #ccc";
+  const getBadgeIcon = (type) => {
+    switch (type.toLowerCase()) {
+      case "crop":
+        return <CropIcon size={14} color="#9FD23A" />;
+      case "fertilizer":
+        return <FertilizerIcon size={14} color="#64B5F6" />;
+      case "yield":
+        return <YieldIcon size={14} color="#FFB74D" />;
+      default:
+        return null;
+    }
   };
+
+  if (!authorized) return null;
 
   return (
-    <div className={styles.bodyWrapper}>
-      <div className={styles.bgDecor}>
-        <div className={styles.bgCircle1} />
-        <div className={styles.bgCircle2} />
-      </div>
+    <div className={styles.bodyWrapper} data-theme="dark">
+      <HeaderNav />
 
       <div className={styles.container}>
-        <div className={styles.topbar}>
-          <Link href="/dashboard" className={styles.backBtn}>
-            <span className={styles.backArrow}>←</span>
-            Back to Dashboard
+        <div style={{ marginBottom: "2rem" }}>
+          <Link href="/dashboard" className="btn-pill" style={{ fontSize: "0.8rem" }}>
+            ← BACK TO DASHBOARD
           </Link>
         </div>
 
-        <div className={styles.headerSection}>
-          <div className={styles.headerIcon}>📜</div>
-          <h2>Prediction History</h2>
-          <p>View all your past predictions in one place</p>
-        </div>
+        <div style={{ marginBottom: "2.5rem" }}>
+          <span className="eyebrow" style={{ color: "#9FD23A" }}>LOGGED DIAGNOSTICS</span>
+          <TextSplit as="h1" className={styles.title}>
+            Prediction History
+          </TextSplit>
+          <p style={{ opacity: 0.8, fontSize: "1.05rem" }}>
+            Review past crop choices, fertilizer recommendations, and harvest predictions triggered from your portal or AI assistant.
+          </p>
 
-        {/* Filter pills */}
-        <div className={styles.filters}>
-          {FILTER_OPTIONS.map((opt) => (
-            <button
-              key={opt.label}
-              className={`${styles.filterBtn} ${filter === opt.value ? styles.filterActive : ""}`}
-              onClick={() => handleFilterChange(opt.value)}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Items list */}
-        <div className={styles.list}>
-          {items.map((item, index) => {
-            const formattedDate = new Date(item.created_at).toLocaleString();
-            return (
-              <div
-                key={item.id}
-                className={styles.item}
-                style={{ borderLeft: getTypeBorder(item.type), animationDelay: `${index * 0.05}s` }}
+          <div className={styles.filters}>
+            {["all", "crop", "fertilizer", "yield"].map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`${styles.filterBtn} ${filter === f ? styles.filterActive : ""}`}
               >
-                <div className={styles.itemTop}>
-                  <span className={getBadgeClass(item.type)}>{item.type}</span>
-                  <span className={styles.date}>{formattedDate}</span>
-                </div>
-                <div className={styles.result}>{item.result}</div>
-                {item.confidence && (
-                  <div className={styles.confRow}>
-                    <div className={styles.confBar}>
-                      <div className={styles.confFill} style={{ width: `${(item.confidence * 100).toFixed(0)}%` }} />
-                    </div>
-                    <span className={styles.confText}>{(item.confidence * 100).toFixed(1)}%</span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                {f}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {message && <p className={styles.message}>{message}</p>}
+        {loading ? (
+          <div style={{ textAlign: "center", padding: "4rem 0", color: "#9FD23A" }}>
+            LOADING HISTORY LOGS...
+          </div>
+        ) : error ? (
+          <div style={{ textAlign: "center", padding: "4rem 0", color: "#FF6319" }}>
+            {error}
+          </div>
+        ) : filteredPredictions.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "4rem 0", opacity: 0.7 }}>
+            No prediction logs found for this filter.
+          </div>
+        ) : (
+          <div className={styles.list}>
+            {filteredPredictions.map((item) => {
+              let parsedInput = {};
+              try {
+                parsedInput = JSON.parse(item.input_data || "{}");
+              } catch (e) {}
 
-        {items.length > 0 && items.length < total && !loading && (
-          <button className={styles.loadMoreBtn} onClick={loadMore}>
-            Load More
-            <span>↓</span>
-          </button>
+              return (
+                <div key={item.id} className={styles.itemCard}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <span className={`${styles.badge} ${getBadgeClass(item.type)}`} style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem" }}>
+                      {getBadgeIcon(item.type)}
+                      {item.type.toUpperCase()}
+                    </span>
+                    <span style={{ fontSize: "0.82rem", opacity: 0.6 }}>
+                      {new Date(item.created_at).toLocaleString()}
+                    </span>
+                  </div>
+
+                  <div style={{ fontSize: "1.4rem", fontWeight: 700, color: "#9FD23A", marginBottom: "0.5rem" }}>
+                    {item.result}
+                  </div>
+
+                  {item.confidence && (
+                    <div style={{ fontSize: "0.88rem", opacity: 0.85, marginBottom: "1rem" }}>
+                      Confidence Score: {(item.confidence * 100).toFixed(1)}%
+                    </div>
+                  )}
+
+                  <div style={{ fontSize: "0.85rem", opacity: 0.7, borderTop: "1px solid rgba(244,237,230,0.1)", paddingTop: "0.75rem", display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+                    {Object.entries(parsedInput).map(([k, v]) => (
+                      <span key={k}>
+                        <strong style={{ color: "#F4EDE6" }}>{k}:</strong> {v ?? "N/A"}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         )}
       </div>
     </div>

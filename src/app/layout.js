@@ -1,8 +1,10 @@
 import "./globals.css";
+import LenisProvider from "@/components/LenisProvider";
+import MouseTrail from "@/components/MouseTrail";
 
 export const metadata = {
-  title: "Agrilux — AI-Powered Smart Farming Assistant",
-  description: "Get crop recommendations, fertilizer advice, and yield predictions powered by Machine Learning.",
+  title: "Agrilux — AI-Powered Smart Farming Platform",
+  description: "Data-driven crop recommendations, fertilizer advice, and yield predictions for modern sustainable agriculture.",
 };
 
 export default function RootLayout({ children }) {
@@ -12,11 +14,16 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <LenisProvider>
+          <MouseTrail />
+          {children}
+        </LenisProvider>
+      </body>
     </html>
   );
 }

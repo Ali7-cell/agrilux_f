@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./login.module.css";
-import { getApiUrl } from "@/lib/api";
+import HeaderNav from "@/components/HeaderNav";
+import TextSplit from "@/components/TextSplit";
 import TreeLogo from "@/components/TreeLogo";
+import { getApiUrl } from "@/lib/api";
 
 export default function Login() {
   const router = useRouter();
@@ -18,7 +20,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // If user is already logged in, redirect to dashboard
     const token = localStorage.getItem("token");
     if (token) {
       router.push("/dashboard");
@@ -54,7 +55,7 @@ export default function Login() {
       } else {
         if (!name) {
           setMessageColor("red");
-          setMessage("Please enter your name.");
+          setMessage("Please enter your full name.");
           setLoading(false);
           return;
         }
@@ -69,11 +70,7 @@ export default function Login() {
 
       if (!response.ok) {
         setMessageColor("red");
-        if (Array.isArray(data.detail)) {
-          setMessage(data.detail.map((err) => err.msg).join(", "));
-        } else {
-          setMessage(data.detail || "Something went wrong.");
-        }
+        setMessage(Array.isArray(data.detail) ? data.detail.map((err) => err.msg).join(", ") : data.detail || "Something went wrong.");
         setLoading(false);
         return;
       }
@@ -81,120 +78,101 @@ export default function Login() {
       if (isLoginMode) {
         localStorage.setItem("token", data.access_token);
         setMessageColor("green");
-        setMessage("Login successful! Redirecting...");
+        setMessage("Login successful! Loading control center...");
         setTimeout(() => {
           router.push("/dashboard");
-        }, 1000);
+        }, 800);
       } else {
         setMessageColor("green");
-        setMessage("Account created successfully! Please login.");
+        setMessage("Account created successfully! Please sign in.");
         setIsLoginMode(true);
         setName("");
       }
     } catch (err) {
       setMessageColor("red");
-      setMessage("Could not connect to the server. Please check if the backend is running.");
+      setMessage("Could not connect to the backend server.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className={styles.bodyWrapper}>
-      {/* Floating decorative elements */}
-      <div className={styles.floatingBg}>
-        <div className={`${styles.floatingLeaf} ${styles.leaf1}`}>🌿</div>
-        <div className={`${styles.floatingLeaf} ${styles.leaf2}`}>🍃</div>
-        <div className={`${styles.floatingLeaf} ${styles.leaf3}`}>🌱</div>
-        <div className={`${styles.floatingLeaf} ${styles.leaf4}`}>🌾</div>
-      </div>
+    <div className={styles.bodyWrapper} data-theme="dark">
+      <HeaderNav />
 
       <div className={styles.container}>
-        {/* Logo */}
-        <Link href="/" className={styles.brandLink}>
-          <TreeLogo size={36} />
-        </Link>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.5rem" }}>
+          <TreeLogo size={48} />
+        </div>
 
-        {/* Card */}
         <div className={styles.card}>
-          <div className={styles.cardHeader}>
-            <h2>{isLoginMode ? "Welcome back" : "Create account"}</h2>
-            <p>{isLoginMode ? "Sign in to your farming dashboard" : "Start your smart farming journey"}</p>
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <span className="eyebrow" style={{ color: "#9FD23A" }}>
+              {isLoginMode ? "FARMER SIGN IN" : "NEW REGISTRATION"}
+            </span>
+            <TextSplit as="h2" className={styles.title}>
+              {isLoginMode ? "Welcome Back" : "Create Account"}
+            </TextSplit>
           </div>
 
           <form onSubmit={handleSubmit}>
             {!isLoginMode && (
               <div className={styles.inputGroup}>
-                <label>Full Name</label>
-                <div className={styles.inputWrapper}>
-                  <span className={styles.inputIcon}>👤</span>
-                  <input
-                    type="text"
-                    placeholder="Enter your full name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required={!isLoginMode}
-                  />
-                </div>
+                <label className={styles.label}>Full Name</label>
+                <input
+                  type="text"
+                  placeholder="JOHN DOE"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="input-underline"
+                  required={!isLoginMode}
+                />
               </div>
             )}
+
             <div className={styles.inputGroup}>
-              <label>Email</label>
-              <div className={styles.inputWrapper}>
-                <span className={styles.inputIcon}>✉️</span>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
+              <label className={styles.label}>Email Address</label>
+              <input
+                type="email"
+                placeholder="FARMER@AGRILUX.COM"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-underline"
+                required
+              />
             </div>
+
             <div className={styles.inputGroup}>
-              <label>Password</label>
-              <div className={styles.inputWrapper}>
-                <span className={styles.inputIcon}>🔒</span>
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
+              <label className={styles.label}>Password</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-underline"
+                required
+              />
             </div>
-            <button type="submit" className={styles.submitBtn} disabled={loading}>
-              {loading ? (
-                <span className={styles.spinner} />
-              ) : (
-                <>
-                  {isLoginMode ? "Sign In" : "Create Account"}
-                  <span className={styles.btnArrow}>→</span>
-                </>
-              )}
+
+            <button type="submit" className="btn-submit" disabled={loading} style={{ width: "100%", marginTop: "1rem" }}>
+              {loading ? "AUTHENTICATING..." : isLoginMode ? "SIGN IN →" : "CREATE ACCOUNT →"}
             </button>
           </form>
 
           <p className={styles.toggleText}>
             {isLoginMode ? (
               <>
-                Don&apos;t have an account?{" "}
-                <span onClick={toggleForm}>Create one</span>
+                Need an Agrilux account? <span onClick={toggleForm}>Register here</span>
               </>
             ) : (
               <>
-                Already have an account?{" "}
-                <span onClick={toggleForm}>Sign in</span>
+                Already registered? <span onClick={toggleForm}>Sign in</span>
               </>
             )}
           </p>
 
           {message && (
-            <div
-              className={`${styles.messageBox} ${messageColor === "green" ? styles.messageSuccess : styles.messageError}`}
-            >
-              <span>{messageColor === "green" ? "✓" : "⚠"}</span>
+            <div style={{ marginTop: "1.5rem", color: messageColor === "green" ? "#9FD23A" : "#FF6319", textAlign: "center", fontSize: "0.95rem" }}>
               {message}
             </div>
           )}
