@@ -3,15 +3,17 @@
  * 
  * Dynamically resolves the backend API URL:
  * 1. Environment variable NEXT_PUBLIC_API_URL if specified.
- * 2. In browser runtime: http://127.0.0.1:8000 when running on localhost / 127.0.0.1.
+ * 2. In browser runtime: http://127.0.0.1:8000 when running on localhost / 127.0.0.1 (if specified).
  * 3. Deployed production backend URL fallback: https://crop-disease-prediction.fastapicloud.dev
  */
 
 export function getApiUrl() {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
+  let url = process.env.NEXT_PUBLIC_API_URL;
+  if (!url) {
+    url = "https://crop-disease-prediction.fastapicloud.dev";
   }
-  return "https://crop-disease-prediction.fastapicloud.dev";
+  return url.replace(/\/+$/, "");
 }
 
 export const API_URL = getApiUrl();
+
