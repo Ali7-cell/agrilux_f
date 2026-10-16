@@ -6,7 +6,7 @@ import Link from "next/link";
 import styles from "./crop.module.css";
 import HeaderNav from "@/components/HeaderNav";
 import TextSplit from "@/components/TextSplit";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, handleUnauthorized } from "@/lib/api";
 import { getCurrentLocationAndWeather } from "@/lib/weather";
 import { LocationIcon } from "@/components/icons/Icons";
 
@@ -157,6 +157,11 @@ export default function CropRecommendation() {
         },
         body: JSON.stringify(payload),
       });
+
+      if (response.status === 401) {
+        handleUnauthorized(router);
+        return;
+      }
 
       const data = await response.json();
 

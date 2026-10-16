@@ -6,7 +6,7 @@ import Link from "next/link";
 import styles from "./history.module.css";
 import HeaderNav from "@/components/HeaderNav";
 import TextSplit from "@/components/TextSplit";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, handleUnauthorized } from "@/lib/api";
 import { CropIcon, FertilizerIcon, YieldIcon } from "@/components/icons/Icons";
 
 export default function HistoryPage() {
@@ -34,6 +34,11 @@ export default function HistoryPage() {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (response.status === 401) {
+        handleUnauthorized(router);
+        return;
+      }
 
       const data = await response.json();
 

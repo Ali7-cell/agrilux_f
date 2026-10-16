@@ -17,3 +17,19 @@ export function getApiUrl() {
 
 export const API_URL = getApiUrl();
 
+/**
+ * Handle 401 Unauthorized responses by clearing stored credentials
+ * and redirecting the user back to the login screen.
+ */
+export function handleUnauthorized(router) {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("token");
+    localStorage.removeItem("recommendedCrop");
+    if (router && typeof router.push === "function") {
+      router.push("/login");
+    } else {
+      window.location.href = "/login";
+    }
+  }
+}
+

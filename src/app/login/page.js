@@ -22,7 +22,20 @@ export default function Login() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      router.push("/dashboard");
+      // Verify token validity before redirecting to prevent trapping users with expired sessions
+      fetch(`${getApiUrl()}/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => {
+          if (res.ok) {
+            router.push("/dashboard");
+          } else {
+            localStorage.removeItem("token");
+          }
+        })
+        .catch(() => {
+          // If network error, allow staying on login screen
+        });
     }
   }, [router]);
 

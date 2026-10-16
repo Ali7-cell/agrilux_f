@@ -8,6 +8,7 @@ import HeaderNav from "@/components/HeaderNav";
 import TextSplit from "@/components/TextSplit";
 import IconGlowCard from "@/components/IconGlowCard";
 import { CropIcon, FertilizerIcon, YieldIcon, RobotIcon, HistoryIcon, UserIcon } from "@/components/icons/Icons";
+import { getApiUrl, handleUnauthorized } from "@/lib/api";
 
 const SERVICES = [
   { href: "/crop", icon: <CropIcon size={28} color="#9FD23A" />, title: "Crop Recommendation", desc: "Predict optimal crops from soil nutrients (N-P-K), pH, and rainfall data." },
@@ -26,9 +27,24 @@ export default function Dashboard() {
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/login");
-    } else {
-      setAuthorized(true);
+      return;
     }
+
+    // Verify token validity with backend to catch expired sessions
+    fetch(`${getApiUrl()}/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          handleUnauthorized(router);
+        } else {
+          setAuthorized(true);
+        }
+      })
+      .catch(() => {
+        // If server is unreachable, still permit local layout display
+        setAuthorized(true);
+      });
   }, [router]);
 
   function logout() {

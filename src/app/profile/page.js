@@ -6,7 +6,7 @@ import Link from "next/link";
 import styles from "./profile.module.css";
 import HeaderNav from "@/components/HeaderNav";
 import TextSplit from "@/components/TextSplit";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, handleUnauthorized } from "@/lib/api";
 
 export default function AccountProfile() {
   const router = useRouter();
@@ -36,6 +36,11 @@ export default function AccountProfile() {
       const response = await fetch(`${getApiUrl()}/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (response.status === 401) {
+        handleUnauthorized(router);
+        return;
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -74,6 +79,11 @@ export default function AccountProfile() {
         },
         body: JSON.stringify(payload),
       });
+
+      if (response.status === 401) {
+        handleUnauthorized(router);
+        return;
+      }
 
       const data = await response.json();
 

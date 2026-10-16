@@ -6,7 +6,7 @@ import Link from "next/link";
 import styles from "./chat.module.css";
 import HeaderNav from "@/components/HeaderNav";
 import MarkdownMessage from "@/components/MarkdownMessage";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, handleUnauthorized } from "@/lib/api";
 import { RobotIcon, MicIcon, SpeakerIcon, MuteIcon, StopIcon, UrduFlagBadge, EnglishFlagBadge } from "@/components/icons/Icons";
 
 const WELCOME_URDU = `### خوش آمدید! میں ایگری لکس AI اسسٹنٹ ہوں۔
@@ -253,6 +253,11 @@ export default function ChatAssistant() {
           history: historyPayload,
         }),
       });
+
+      if (response.status === 401) {
+        handleUnauthorized(router);
+        return;
+      }
 
       const data = await response.json();
 
